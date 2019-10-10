@@ -16,4 +16,9 @@
 @if (! empty($tag->priority))
     <priority>{{ number_format($tag->priority,1) }}</priority>
     @endif
+@if (count($tag->images))
+@foreach($tag->images as $image)
+    @include('laravel-sitemap::image')
+    @endforeach
+@endif
 </url>

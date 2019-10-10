@@ -59,8 +59,16 @@ class Sitemap implements Responsable
 
         $tags = collect($this->tags)->unique('url');
 
+        $hasImages = false;
+
+        foreach ($tags as $tag) {
+            if (count($tag->images)) {
+                $hasImages = true;
+            }
+        }
+
         return view('laravel-sitemap::sitemap')
-            ->with(compact('tags'))
+            ->with(['tags' => $tags, 'hasImages' => $hasImages])
             ->render();
     }
 

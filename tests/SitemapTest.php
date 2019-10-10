@@ -4,6 +4,7 @@ namespace Spatie\Sitemap\Test;
 
 use Illuminate\Support\Facades\Storage;
 use Spatie\Sitemap\Sitemap;
+use Spatie\Sitemap\Tags\Image;
 use Spatie\Sitemap\Tags\Url;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -164,5 +165,41 @@ class SitemapTest extends TestCase
         $this->sitemap->add(Url::create('/home'));
 
         $this->assertInstanceOf(Response::class, $this->sitemap->toResponse(new Request));
+    }
+
+    /** @test */
+    public function it_can_render_an_url_with_an_image()
+    {
+        $this->sitemap
+            ->add(Url::create('/home')
+                ->setLastModificationDate($this->now->subDay())
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
+                ->setPriority(0.1)
+                ->addImage(
+                    Image::create('/url/to/image.jpg')
+                )
+            );
+
+        $this->assertMatchesXmlSnapshot($this->sitemap->render());
+    }
+
+    /** @test */
+    public function it_can_render_an_url_with_an_image_and_all_its_set_properties()
+    {
+        $this->sitemap
+            ->add(Url::create('/home')
+                ->setLastModificationDate($this->now->subDay())
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
+                ->setPriority(0.1)
+                ->addImage(
+                    Image::create('/url/to/image.jpg')
+                        ->setTitle('Image Title')
+                        ->setCaption('Image Caption')
+                        ->setGeoLocation('Image Geo Location')
+                        ->setLicense('https://url/to/the/license')
+                )
+            );
+
+        $this->assertMatchesXmlSnapshot($this->sitemap->render());
     }
 }
