@@ -3,7 +3,6 @@
 namespace Spatie\Sitemap\Test;
 
 use Carbon\Carbon;
-use Spatie\Sitemap\Tags\Alternate;
 use Spatie\Sitemap\Tags\Image;
 
 class ImageTest extends TestCase
